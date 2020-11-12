@@ -1,16 +1,7 @@
 import hashlib
 from blockchain import proof
+import pickle
 
-class Blockchain:
-    blocks = []
-
-    def __init__(self,block):
-        self.blocks.append(block)
-
-    def addBlock(self, data):
-        prevBlock = self.blocks[len(self.blocks)-1]
-        new = createBlock(data,prevBlock.hash)
-        self.blocks.append(new)
 
 class Block:
     hash = []
@@ -29,6 +20,13 @@ class Block:
         pow = proof.ProofOfWork(self,target)
         return pow
 
+    def serialize(self):
+        encoder = pickle.dumps(self)
+        return encoder
+
+def deserialize(data):
+    block = pickle.loads(data)
+    return block   
 
 def createBlock(data,prevHash):
     block = Block(data,prevHash,0)
@@ -43,5 +41,4 @@ def createBlock(data,prevHash):
 def genesis():
     return createBlock("Genesis", " ")
 
-def initBlockchain():
-    return Blockchain(genesis())
+
